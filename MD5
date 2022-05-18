@@ -1,0 +1,13 @@
+68808f0d466d98b91f760b71b92e410a *DESCRIPTION
+abe96171016ca1c55fcccf01282c141e *LICENSE
+a42b4671db654687854612b376659e62 *NAMESPACE
+c48302fba3c81cc8999963185bed2c1d *R/DLPCA.R
+03ac23b2ea8fc477ed14700a1ce7a888 *R/MSEpca.R
+c0d116e52d54fbcbdbbdcbeee54cc2b7 *data/Application.rda
+f40a24f8f9b0ea0f6fb6209705564ae4 *data/Iris.rda
+251c8e7c96c87d5948cacc712118d007 *data/Ontime.rda
+8c275b749f872351437cc6dcb7cd89d6 *man/Application.Rd
+ec621fb0e1e588ae11d0c0c4b8a7b55c *man/DLPCA.Rd
+5b4e57a4566a563fadeb329937d694ec *man/Iris.Rd
+df8ebaa2b0cf0410d00d7c591d02d35a *man/MSEpca.Rd
+7fed7e914d41a0cc387b085104b965b8 *man/Ontime.Rd
