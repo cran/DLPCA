@@ -1,7 +1,7 @@
-#' Caculate the MSE values of the DLPCA method
+#' Calculate the MSE values of the DLPCA method
 #'
 #' @param V is the right singular matrix
-#' @param X is the orignal data set
+#' @param X is the original data matrix
 #' @param n is the sample size
 #' @param p is the number of variables
 #' @param m is the number of eigenvalues
@@ -19,12 +19,10 @@
 #' V=DLPCA_result$V
 #' MSEpca_result=MSEpca(V=V,X=X,n=n,p=p,m=m,K=K,L=L) 
 #' MSE_PCA=MSEpca_result$MSEpca
-
-DLPCA <-
-function(X=X,n=n,p=p,m=m,K=K,L=L){
+DLPCA=function(X=X,n=n,p=p,m=m,K=K,L=L){
   nk=ceiling(n/K);nl=ceiling(nk/L);s0=min(nl,p)
   MeanXk=matrix(0,L,p)
-  MMSES=MMSEX=matrix(rep(0,1*K),ncol=K)  
+  MMSER=MMSES=MMSEX=matrix(rep(0,1*K),ncol=K)  
  lll=0
  time=system.time(while(lll==0){ 
 mr=c(sample(1:n,n,replace=F),sample(1:n,K*nk-n,replace=F))
@@ -35,7 +33,10 @@ mr=c(sample(1:n,n,replace=F),sample(1:n,K*nk-n,replace=F))
     mri=mr[(i-1)*nk+(1:(nk))]
     Xik=X[mri,]    
     meanXik=(1/nk)*(matrix(1,1,nk)%*%Xik) 
-    XCik=Xik-matrix(1,nk,1)%*%meanXik        
+XCik=Xik-matrix(1,nk,1)%*%meanXik 
+Vikhat=t(svd(XCik)$v)  
+Vikhatm=Vikhat[,1:m]  
+SikhatR=Vikhatm%*%t(Vikhatm) 
     Sik=(1/(nk-1))*t(XCik)%*%(XCik)
     mrr=c(sample(1:nk,nk,replace=F),sample(1:nk,L*nl-nk,replace=F))
     for (l in 1:L){
@@ -81,6 +82,11 @@ mr=c(sample(1:n,n,replace=F),sample(1:n,K*nk-n,replace=F))
     V=svd(R)$v
     Vm=V[,1:m]                
     XCikhat=XCik%*%Vm%*%t(Vm) 
+Viktilde=t(svd(XCikhat)$v)  
+Viktildem=Viktilde[,1:m]  
+SiktildeR=Viktildem%*%t(Viktildem) 
+MMSEikR=(1/((nk-1)))*sum(diag(t(SikhatR-SiktildeR)%*%(SikhatR-SiktildeR)))
+MMSER[i]=MMSEikR
     MMSEXik=(1/(p*(nk-1)))*sum(diag(t(XCik-XCikhat)%*%(XCik-XCikhat)))
     MMSEX[i]=MMSEXik
     Sikhat=(1/(nk-1))*t(XCikhat)%*%XCikhat
@@ -90,8 +96,12 @@ mr=c(sample(1:n,n,replace=F),sample(1:n,K*nk-n,replace=F))
   }
   lll=1
   })
+  Vsig=svd(X)$v    
+  Vmsig=Vsig[,1:m]   
+  Xm=X%*%Vmsig%*%t(Vmsig)
+  sigm=(1/(n-1))*t(Xm)%*%(Xm)
   Smean=S1/K
-  MSES=min(MMSES);MSEX=min(MMSEX)             
-  wMSES=which.min(MMSES);wMSEX=which.min(MMSEX)
-  return(list(time=time,V=V,Vm=Vm,Smean=Smean,MMSES= MMSES,MMSEX=MMSEX,MSES=MSES,MSEX=MSEX,wMSES=wMSES,wMSEX=wMSEX))
+  MSES=min(MMSES);MSEX=min(MMSEX) ; MSER=min(MMSER)          
+  wMSES=which.min(MMSES);wMSEX=which.min(MMSEX); wMSER=which.min(MMSER)
+  return(list(time=time,V=V,Vm=Vm,Smean=Smean,MMSER=MMSER,MMSES= MMSES,MMSEX=MMSEX,MSES=MSES,MSEX=MSEX,MSER=MSER,wMSES=wMSES,wMSEX=wMSEX,wMSER=wMSER, sigm= sigm))
 }

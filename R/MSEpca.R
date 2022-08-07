@@ -1,7 +1,7 @@
-#' Caculate the MSE values of the DLPCA method
+#' Calculate the MSE values of the DLPCA method
 #'
 #' @param V is the right singular matrix
-#' @param X is the orignal data set
+#' @param X is the original data matrix
 #' @param n is the sample size
 #' @param p is the number of variables
 #' @param m is the number of eigenvalues
